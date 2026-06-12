@@ -218,10 +218,10 @@ class Title {
 
     this.mesh = new Mesh(this.gl, { geometry, program });
     const aspect = width / height;
-    const textHeight = this.plane.scale.y * 0.12;
+    const textHeight = this.plane.scale.y * 0.10;
     const textWidth = textHeight * aspect;
     this.mesh.scale.set(textWidth, textHeight, 1);
-    this.mesh.position.y = -this.plane.scale.y * 0.28;
+    this.mesh.position.y = -this.plane.scale.y * 0.45;
     this.mesh.setParent(this.plane);
   }
 }
@@ -424,9 +424,9 @@ class Media {
     if (screen) this.screen = screen;
     if (viewport) this.viewport = viewport;
 
-    this.scale = this.screen.height / 900;
-    this.plane.scale.y = (this.viewport.height * (1800 * this.scale)) / this.screen.height;
-    this.plane.scale.x = (this.viewport.width * (1400 * this.scale)) / this.screen.width;
+    this.scale = this.screen.height / 1400;
+    this.plane.scale.y = (this.viewport.height * (950 * this.scale)) / this.screen.height;
+    this.plane.scale.x = (this.viewport.width * (750 * this.scale)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
     this.padding = 2;
     this.width = this.plane.scale.x + this.padding;
