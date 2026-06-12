@@ -60,8 +60,6 @@ export function LandscapeGallery() {
 
   return (
     <section id="gallery" className="relative overflow-hidden bg-black py-24 md:py-36">
-      <div className="pointer-events-none absolute inset-x-0 top-16 h-64 bg-[radial-gradient(circle_at_50%_0%,rgba(122,210,255,0.16),transparent_62%)]" />
-
       <div className="relative mx-auto max-w-7xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
