@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.output/
+.vinxi/
+.tanstack/
+
+# Logs
+*.log
+*.err.log
+*.out.log
+
+# Debug artifacts
+chrome-cdp-profile/
+page-*.png
+
+# Generated server files
+.codex-ssr-server.mjs
+.codex-static-server.cjs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Archives (large, track separately)
+*.zip
+
+# Lock files (optional, remove if you want to track them)
+package-lock.json
+bun.lock
+pnpm-lock.yaml
