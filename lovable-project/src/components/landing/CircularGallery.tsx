@@ -218,10 +218,10 @@ class Title {
 
     this.mesh = new Mesh(this.gl, { geometry, program });
     const aspect = width / height;
-    const textHeight = this.plane.scale.y * 0.15;
+    const textHeight = this.plane.scale.y * 0.12;
     const textWidth = textHeight * aspect;
     this.mesh.scale.set(textWidth, textHeight, 1);
-    this.mesh.position.y = -this.plane.scale.y * 0.5 - textHeight * 0.5 - 0.08;
+    this.mesh.position.y = -this.plane.scale.y * 0.28;
     this.mesh.setParent(this.plane);
   }
 }
@@ -289,11 +289,13 @@ class Media {
         uniform mat4 projectionMatrix;
         uniform float uTime;
         uniform float uSpeed;
+        uniform float uHover;
         varying vec2 vUv;
         void main() {
           vUv = uv;
           vec3 p = position;
           p.z = (sin(p.x * 4.0 + uTime) * 1.5 + cos(p.y * 2.0 + uTime) * 1.5) * (0.1 + uSpeed * 0.5);
+          p.y += uHover * 0.15;
           gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
         }
       `,
@@ -303,6 +305,7 @@ class Media {
         uniform vec2 uPlaneSizes;
         uniform sampler2D tMap;
         uniform float uBorderRadius;
+        uniform float uHover;
         varying vec2 vUv;
 
         float roundedBoxSDF(vec2 p, vec2 b, float r) {
@@ -322,7 +325,8 @@ class Media {
           vec4 color = texture2D(tMap, uv);
           float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
           float alpha = 1.0 - smoothstep(-0.002, 0.002, d);
-          gl_FragColor = vec4(color.rgb, alpha);
+          float brightness = mix(0.4, 1.0, uHover);
+          gl_FragColor = vec4(color.rgb * brightness, alpha);
         }
       `,
       uniforms: {
@@ -332,6 +336,7 @@ class Media {
         uSpeed: { value: 0 },
         uTime: { value: 100 * Math.random() },
         uBorderRadius: { value: this.borderRadius },
+        uHover: { value: 1 },
       },
       transparent: true,
     });
@@ -406,13 +411,22 @@ class Media {
     }
   }
 
+  setHover(hovered: boolean) {
+    const target = hovered ? 1 : 0;
+    this.program.uniforms.uHover.value = lerp(
+      this.program.uniforms.uHover.value,
+      target,
+      0.12,
+    );
+  }
+
   onResize({ screen, viewport }: Partial<ResizeState> = {}) {
     if (screen) this.screen = screen;
     if (viewport) this.viewport = viewport;
 
-    this.scale = this.screen.height / 1500;
-    this.plane.scale.y = (this.viewport.height * (900 * this.scale)) / this.screen.height;
-    this.plane.scale.x = (this.viewport.width * (700 * this.scale)) / this.screen.width;
+    this.scale = this.screen.height / 900;
+    this.plane.scale.y = (this.viewport.height * (1800 * this.scale)) / this.screen.height;
+    this.plane.scale.x = (this.viewport.width * (1400 * this.scale)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
     this.padding = 2;
     this.width = this.plane.scale.x + this.padding;
@@ -450,6 +464,8 @@ class GalleryApp {
   boundOnTouchDown!: (event: MouseEvent | TouchEvent) => void;
   boundOnTouchMove!: (event: MouseEvent | TouchEvent) => void;
   boundOnTouchUp!: (event: MouseEvent | TouchEvent) => void;
+  boundOnMouseMove!: (event: MouseEvent) => void;
+  hoveredMedia: Media | null = null;
 
   constructor(
     container: HTMLDivElement,
@@ -661,18 +677,64 @@ class GalleryApp {
     this.raf = window.requestAnimationFrame(this.update.bind(this));
   }
 
+  getMediaAtPosition(event: MouseEvent): Media | null {
+    const rect = this.container.getBoundingClientRect();
+    const x = event.clientX;
+    const y = event.clientY;
+    const worldX = ((x - rect.left) / rect.width - 0.5) * this.viewport.width;
+    const worldY = (0.5 - (y - rect.top) / rect.height) * this.viewport.height;
+
+    const candidates = this.medias
+      .filter((media) => {
+        const halfWidth = media.plane.scale.x * 0.5;
+        const halfHeight = media.plane.scale.y * 0.5;
+        return (
+          worldX >= media.plane.position.x - halfWidth &&
+          worldX <= media.plane.position.x + halfWidth &&
+          worldY >= media.plane.position.y - halfHeight &&
+          worldY <= media.plane.position.y + halfHeight
+        );
+      })
+      .sort(
+        (a, b) => Math.abs(a.plane.position.x - worldX) - Math.abs(b.plane.position.x - worldX),
+      );
+
+    return candidates[0] || null;
+  }
+
+  onMouseMove(event: MouseEvent) {
+    const media = this.getMediaAtPosition(event);
+    if (media !== this.hoveredMedia) {
+      if (this.hoveredMedia) this.hoveredMedia.setHover(false);
+      if (media) media.setHover(true);
+      this.hoveredMedia = media;
+      this.container.style.cursor = media ? "pointer" : "grab";
+    }
+  }
+
+  onMouseLeave() {
+    if (this.hoveredMedia) {
+      this.hoveredMedia.setHover(false);
+      this.hoveredMedia = null;
+      this.container.style.cursor = "grab";
+    }
+  }
+
   addEventListeners() {
     this.boundOnResize = this.onResize.bind(this);
     this.boundOnWheel = this.onWheel.bind(this);
     this.boundOnTouchDown = this.onTouchDown.bind(this);
     this.boundOnTouchMove = this.onTouchMove.bind(this);
     this.boundOnTouchUp = this.onTouchUp.bind(this);
+    this.boundOnMouseMove = this.onMouseMove.bind(this);
 
     window.addEventListener("resize", this.boundOnResize);
     this.container.addEventListener("wheel", this.boundOnWheel, { passive: true });
     this.container.addEventListener("mousedown", this.boundOnTouchDown);
     window.addEventListener("mousemove", this.boundOnTouchMove);
     window.addEventListener("mouseup", this.boundOnTouchUp);
+    this.container.addEventListener("mousemove", this.boundOnMouseMove);
+    this.container.addEventListener("mouseleave", this.onMouseLeave.bind(this));
     this.container.addEventListener("touchstart", this.boundOnTouchDown, { passive: true });
     this.container.addEventListener("touchmove", this.boundOnTouchMove, { passive: true });
     this.container.addEventListener("touchend", this.boundOnTouchUp);

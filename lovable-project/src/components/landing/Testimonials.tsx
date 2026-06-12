@@ -15,7 +15,7 @@ export function Testimonials() {
   const quotes = t.testimonials.quotes;
 
   return (
-    <section id="journal" className="relative overflow-hidden bg-[#071f33] py-32 md:py-48">
+    <section id="journal" className="relative w-full min-h-screen overflow-hidden bg-[#071f33] flex items-center justify-center px-6 py-12 md:py-16">
       <AnimatePresence mode="wait">
         <motion.img
           key={journalImages[activeQuote]}
@@ -30,8 +30,8 @@ export function Testimonials() {
       </AnimatePresence>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_26%,rgba(170,215,255,0.12),transparent_42%),linear-gradient(180deg,rgba(4,18,28,0.5),rgba(4,18,28,0.56))]" />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+      <div className="relative z-10 mx-auto max-w-6xl w-full flex flex-col items-center justify-center">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white font-body mb-6">
             {t.testimonials.badge}
           </div>

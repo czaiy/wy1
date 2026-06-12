@@ -39,13 +39,13 @@ export function StatsSection() {
   const gridMotionItems = motionImages;
 
   return (
-    <section className="relative overflow-hidden bg-[#071f33] py-32 md:py-48">
+    <section className="relative w-full min-h-screen overflow-hidden bg-[#071f33] flex items-center justify-center">
       <div className="absolute inset-0 opacity-[0.72] saturate-[0.9]">
         <GridMotion items={gridMotionItems} gradientColor="rgba(12, 48, 76, 0.55)" />
       </div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,rgba(123,203,255,0.14),transparent_42%),linear-gradient(180deg,rgba(3,18,31,0.42),rgba(3,18,31,0.54))]" />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6">
+      <div className="relative z-10 mx-auto max-w-6xl px-6 flex items-center justify-center w-full">
         <div className="liquid-glass rounded-3xl border border-white/16 bg-black/20 p-12 shadow-[0_34px_120px_rgba(0,0,0,0.42)] md:p-16">
           <div className="grid grid-cols-2 gap-10 md:grid-cols-4 md:gap-6">
             {stats.map((s, i) => (

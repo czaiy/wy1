@@ -23,7 +23,7 @@ export function FeaturesGrid() {
   }));
 
   return (
-    <section id="features" className="relative overflow-hidden bg-[#071f33] py-32 md:py-48">
+    <section id="features" className="relative w-full min-h-screen overflow-hidden bg-[#071f33] flex items-center justify-center">
       <AnimatePresence mode="wait">
         <motion.img
           key={featureImages[activeFeature]}
@@ -38,8 +38,8 @@ export function FeaturesGrid() {
       </AnimatePresence>
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(164,214,255,0.14),transparent_42%),linear-gradient(180deg,rgba(3,17,30,0.48),rgba(3,17,30,0.5))]" />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+      <div className="relative z-10 mx-auto max-w-6xl px-6 flex flex-col items-center justify-center w-full">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex liquid-glass rounded-full px-3.5 py-1 text-xs font-medium text-white font-body mb-6">
             {t.featuresGrid.badge}
           </div>

@@ -59,59 +59,60 @@ export function LandscapeGallery() {
   );
 
   return (
-    <section id="gallery" className="relative overflow-hidden py-24 md:py-36">
+    <section id="gallery" className="relative overflow-hidden bg-black py-24 md:py-36">
       <div className="pointer-events-none absolute inset-x-0 top-16 h-64 bg-[radial-gradient(circle_at_50%_0%,rgba(122,210,255,0.16),transparent_62%)]" />
 
       <div className="relative mx-auto max-w-7xl px-6">
-        <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <motion.div
-            initial={{ opacity: 0, y: 24, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div
-              className={`liquid-glass mb-5 inline-flex rounded-full px-3.5 py-1 text-xs font-medium text-white/80 ${
-                isZh ? "font-zh-serif tracking-[0.18em]" : "font-body uppercase tracking-[0.18em]"
-              }`}
-            >
-              {isZh ? "灵感图集" : "Mood gallery"}
-            </div>
-            <h2
-              className={`max-w-3xl text-white ${
-                isZh
-                  ? "font-zh-serif text-4xl font-light leading-[1.18] tracking-[0.08em] md:text-6xl"
-                  : "font-heading text-5xl italic leading-[0.9] md:text-7xl"
-              }`}
-            >
-              {isZh ? "像从收藏夹里取出的风景。" : "Landscapes pulled from the moodboard."}
-            </h2>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ delay: 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className={`max-w-md text-sm leading-7 text-white/58 md:text-base ${
-              isZh ? "font-zh-serif tracking-[0.06em]" : "font-body"
-            }`}
-          >
-            {isZh
-              ? "参考 Pinterest 上暗森林、雾湖、山脊和海岸的视觉氛围，使用可公开引用的风景图片完成页面展示。"
-              : "Inspired by Pinterest boards for dark forests, misty lakes, ridgelines, and coastal air, using publicly referenceable landscape imagery."}
-          </motion.p>
-        </div>
-
         <motion.div
           initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.16 }}
           transition={{ delay: 0.08, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-          className="relative h-[440px] overflow-hidden rounded-[2rem] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.075),rgba(255,255,255,0.015))] shadow-[0_30px_90px_rgba(0,0,0,0.38)] backdrop-blur-2xl md:h-[560px]"
+          className="relative flex min-h-[85vh] flex-col overflow-hidden rounded-[2rem] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.075),rgba(255,255,255,0.015))] shadow-[0_30px_90px_rgba(0,0,0,0.38)] backdrop-blur-2xl p-8 md:p-12"
         >
           <div className="pointer-events-none absolute inset-0 z-10 bg-[radial-gradient(circle_at_50%_16%,rgba(255,255,255,0.12),transparent_32%),linear-gradient(90deg,rgba(0,0,0,0.38),transparent_22%,transparent_78%,rgba(0,0,0,0.38))]" />
-          <div className="absolute inset-0">
+
+          <div className="relative z-20 mb-12 md:mb-16">
+            <motion.div
+              initial={{ opacity: 0, y: 24, filter: "blur(10px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div
+                className={`liquid-glass mb-4 inline-flex rounded-full px-3.5 py-1 text-xs font-medium text-white/80 ${
+                  isZh ? "font-zh-serif tracking-[0.18em]" : "font-body uppercase tracking-[0.18em]"
+                }`}
+              >
+                {isZh ? "灵感图集" : "Mood gallery"}
+              </div>
+              <h2
+                className={`max-w-3xl text-white ${
+                  isZh
+                    ? "font-zh-serif text-3xl font-light leading-[1.18] tracking-[0.08em] md:text-5xl"
+                    : "font-heading text-4xl italic leading-[0.9] md:text-6xl"
+                }`}
+              >
+                {isZh ? "像从收藏夹里取出的风景。" : "Landscapes pulled from the moodboard."}
+              </h2>
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ delay: 0.08, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className={`mt-4 max-w-md text-sm leading-7 text-white/58 md:text-base ${
+                isZh ? "font-zh-serif tracking-[0.06em]" : "font-body"
+              }`}
+            >
+              {isZh
+                ? "参考 Pinterest 上暗森林、雾湖、山脊和海岸的视觉氛围，使用可公开引用的风景图片完成页面展示。"
+                : "Inspired by Pinterest boards for dark forests, misty lakes, ridgelines, and coastal air, using publicly referenceable landscape imagery."}
+            </motion.p>
+          </div>
+
+          <div className="relative z-20 flex flex-1 items-center justify-center">
             <CircularGallery
               items={items}
               bend={2.65}
